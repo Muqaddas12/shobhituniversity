@@ -38,7 +38,7 @@ export default function App() {
   return (
     // SafeAreaView ensures content is displayed correctly on devices with notches or home indicators
     <SafeAreaView style={styles.container}>
-    
+          <Navbar />
 
       {/* Main content area, using View with flex: 1 to take available space */}
       <View style={{ flex: 1 }}>
@@ -46,7 +46,7 @@ export default function App() {
         {/* The ScrollView itself is set to flex: 1 to allow it to take space and scroll */}
         <ScrollView contentContainerStyle={styles.scroll} style={{ flex: 1 }}>
             {/* Navigation Bar at the top of the screen */}
-      <Navbar />
+
           {/* Image slideshow at the top of the content */}
           <ImageSlideshow />
 
@@ -72,29 +72,7 @@ export default function App() {
           <Footer />
         </ScrollView>
 
-        {/* WebView section was here previously, now commented out or removed */}
-        {/*
-          If a WebView or a bottom fixed section is needed, it would go here.
-          Example:
-          <View style={styles.fixedBottomSection}>
-            <Text>This is a fixed bottom section</Text>
-          </View>
-          or the WebView:
-          {loading && ( // Show loading indicator if WebView is loading
-            <View style={styles.loading}>
-              <ActivityIndicator size="large" color="#007bff" />
-            </View>
-          )}
-          <WebView
-            source={{ uri: 'https://sug.ac.in' }}
-            style={{ height: height * 0.4 }} // Example fixed height
-            // injectedJavaScript={injectedJS} // JavaScript to inject into WebView
-            javaScriptEnabled
-            domStorageEnabled
-            onLoadStart={() => setLoading(true)}
-            onLoadEnd={() => setLoading(false)}
-          />
-        */}
+       
       </View>
 
       {/* StatusBar component to style the device's status bar (e.g., time, battery) */}

@@ -8,36 +8,36 @@ import {
   Dimensions,
   Modal,
   Pressable,
-  Animated, // Import Animated
+  Animated, 
   Platform,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons'; // Assuming Ionicons are installed
-
+import Icon from 'react-native-vector-icons/Ionicons'; 
+import { useRouter } from 'expo-router';
 const { width, height } = Dimensions.get('window');
-const SIDEBAR_WIDTH = width * 0.75; // Sidebar width (75% of screen width)
+const SIDEBAR_WIDTH = width * 0.75; 
 
-// Define menu items with icons and target screen names
+
 const menuItems = [
-  { id: '1', title: 'Home', icon: 'home-outline', screen: 'HomeScreen' },
-  { id: '2', title: 'About University', icon: 'information-circle-outline', screen: 'AboutScreen' },
+  { id: '1', title: 'Home', icon: 'home-outline', screen: '/' },
+  { id: '2', title: 'About University', icon: 'information-circle-outline', screen: 'About' },
   { id: '3', title: 'Admissions', icon: 'school-outline', screen: 'AdmissionsScreen' },
-  { id: '4', title: 'Programs Offered', icon: 'library-outline', screen: 'ProgramsScreen' },
+  { id: '4', title: 'Programs Offered', icon: 'library-outline', screen: 'Programs' },
   { id: '5', title: 'Campus Life', icon: 'leaf-outline', screen: 'CampusLifeScreen' },
   { id: '6', title: 'Latest News', icon: 'newspaper-outline', screen: 'NewsScreen' },
-  { id: '7', title: 'Contact Us', icon: 'call-outline', screen: 'ContactScreen' },
+  { id: '7', title: 'Contact Us', icon: 'call-outline', screen: 'Contactus' },
   { id: '8', title: 'Settings', icon: 'settings-outline', screen: 'SettingsScreen' },
 ];
 
-export default function Navbar({ navigation }) { // Accept navigation prop if using React Navigation
+export default function Navbar(props) { 
+const router=useRouter()
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
-  const slideAnimation = useRef(new Animated.Value(-SIDEBAR_WIDTH)).current; // Initial position off-screen
+  const slideAnimation = useRef(new Animated.Value(-SIDEBAR_WIDTH)).current; 
 
   useEffect(() => {
-    // Animate sidebar based on visibility state
     Animated.timing(slideAnimation, {
-      toValue: isSidebarVisible ? 0 : -SIDEBAR_WIDTH, // Target position (0 for visible, -SIDEBAR_WIDTH for hidden)
-      duration: 250, // Animation duration in milliseconds
-      useNativeDriver: true, // Use native driver for better performance (only for transform, opacity)
+      toValue: isSidebarVisible ? 0 : -SIDEBAR_WIDTH, 
+      duration: 250, 
+      useNativeDriver: true, 
     }).start();
   }, [isSidebarVisible, slideAnimation]);
 
@@ -46,35 +46,26 @@ export default function Navbar({ navigation }) { // Accept navigation prop if us
   };
 
   const handleNavigation = (screenName) => {
-    toggleSidebar(); // Close the sidebar
-    // Replace with actual navigation logic:
-    // if (navigation && typeof navigation.navigate === 'function') {
-    //   navigation.navigate(screenName);
-    // } else {
-    console.log(`Maps to: ${screenName}`);
-    // }
+    toggleSidebar();
+    router.push(`${screenName}`)
   };
 
   return (
     <>
-      {/* Header Section */}
       <SafeAreaView style={styles.safeAreaHeader}>
         <View style={styles.header}>
           <TouchableOpacity onPress={toggleSidebar} style={styles.headerIconContainer}>
             <Icon name="menu" size={28} color="white" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Shobhit University</Text>
-          {/* Spacer to balance the title, or for another icon */}
+          <Text style={styles.headerTitle}>{props.name}</Text>
           <View style={styles.headerIconContainer} />
         </View>
       </SafeAreaView>
-
-      {/* Sidebar Modal */}
       <Modal
         transparent={true}
         visible={isSidebarVisible}
-        onRequestClose={toggleSidebar} // For Android back button
-        animationType="none" // We handle animation manually with Animated.View
+        onRequestClose={toggleSidebar} 
+        animationType="none" 
       >
         <Pressable style={styles.modalOverlay} onPress={toggleSidebar}>
           <Animated.View
@@ -82,13 +73,13 @@ export default function Navbar({ navigation }) { // Accept navigation prop if us
               styles.sidebar,
               { transform: [{ translateX: slideAnimation }] },
             ]}
-            // Prevent press on sidebar from closing it via overlay
+           
             onStartShouldSetResponder={() => true}
             onTouchEnd={(e) => e.stopPropagation()}
           >
             <SafeAreaView style={styles.sidebarSafeArea}>
               <View style={styles.sidebarHeader}>
-                <Text style={styles.sidebarTitle}>Navigation Menu</Text>
+                <Text style={styles.sidebarTitle}>Shobhit University</Text>
                 <TouchableOpacity onPress={toggleSidebar} style={styles.headerIconContainer}>
                   <Icon name="close" size={30} color="white" />
                 </TouchableOpacity>
@@ -107,8 +98,6 @@ export default function Navbar({ navigation }) { // Accept navigation prop if us
                   </TouchableOpacity>
                 ))}
               </View>
-
-              {/* Sidebar Footer (Optional) */}
               <View style={styles.sidebarFooter}>
                 <Text style={styles.sidebarFooterText}>
                   Shobhit University App v1.0
@@ -126,17 +115,14 @@ const styles = StyleSheet.create({
   // Header Styles
   safeAreaHeader: {
     width:width,
-    backgroundColor: '#2563EB', // Blue theme color for status bar area
-    padding:0,
-    marginLeft:-height*.022,
-    marginTop:-height*.020,
-    marginBottom:10,
+    backgroundColor: '#2563EB',
+
     
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    
     paddingHorizontal: 12,
     paddingVertical: Platform.OS === 'android' ? 12 : 10, // Adjust padding for platform
     backgroundColor: '#2563EB', // Header background color
@@ -151,6 +137,8 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 20,
     fontWeight: 'bold',
+    alignItems:'center',
+    alignContent:'center',
   },
 
   // Modal and Overlay Styles
